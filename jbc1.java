@@ -18,8 +18,8 @@ import javax.swing.Timer;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 
-public class jbc1 extends JPanel {
-
+public class jbc1 extends JPanel
+{
     private static final long serialVersionUID = 1L;
     private int []cx;
     private int []cy;
@@ -28,18 +28,18 @@ public class jbc1 extends JPanel {
     private int xinc = 1;
     private int yinc = 1;
     private int count=0;
-    private int n=0;
+    private int n=3;
     Timer t;
     private JTextField textField;
-
-    public static void main(String[] args) {
-        EventQueue.invokeLater(new Runnable() {
-
+    
+    public static void main(String[] args)
+    {
+        EventQueue.invokeLater(new Runnable(){
             @Override
-            public void run() {
+            public void run()
+            {
                 jbc1 panel = new jbc1();
                 panel.setPreferredSize(new Dimension(900, 700));
-//                panel.animate();
                 JFrame frame = new JFrame("Test");
                 frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 frame.getContentPane().add(panel);
@@ -49,61 +49,56 @@ public class jbc1 extends JPanel {
             }
         });
     }
-
-    public jbc1() {
-        setLayout(null);
+    public jbc1()
+    {
+    	setLayout(null);
         setBackground(Color.BLACK);
         setForeground(Color.RED);
         setOpaque(true);
-		  t=new Timer(15, new ActionListener() {
-
+		t=new Timer(15, new ActionListener(){
 	            @Override
-	            
-	            public void actionPerformed(ActionEvent e) {
-	               
+	            public void actionPerformed(ActionEvent e)
+	            {
 	            	for(int i=0;i<n;i++)
 	            	{
-	            	 for(int j=0;j<n;j++)
-	            	 {
-	            	Rectangle oldCircle = new Rectangle(cx[i] - 1, cy[j] - 1, cw + 2, ch + 2);
-	                cx[i] += xinc;
-//	                cy += yinc;
-	                if (cx[i] >= getWidth() - cw || cx[i] <= 0) {
-	                    xinc *= -1;
-	                }
-	                if (cy[j] >= getHeight() - ch || cy[j] <= 0) {
-	                    yinc *= -1;
-	                }
-	                repaint(oldCircle);
-	                repaint(cx[i] - 1, cy[i] - 1, cw + 2, ch + 2);
-	            	
-	            	 }}
+	            		for(int j=0;j<n;j++)
+	            		{
+		        			Rectangle oldCircle = new Rectangle(cx[i] - 1, cy[j] - 1, cw + 2, ch + 2);
+		        			cx[i] += xinc;
+		        			if (cx[i] >= getWidth() - cw || cx[i] <= 0)
+		        			{
+		        				xinc *= -1;
+		        			}
+		        			if (cy[j] >= getHeight() - ch || cy[j] <= 0)
+		        			{
+		        				yinc *= -1;
+		        			}
+			                repaint(oldCircle);	            	
+	            		}
 	            	}
+	            }
 	        });
         JButton btnClickMe = new JButton("|>");
         btnClickMe.setBounds(105, 341, 45, 36);
-        btnClickMe.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent arg0) {
+        btnClickMe.addActionListener(new ActionListener(){
+        	public void actionPerformed(ActionEvent arg0)
+        	{
         		 count++;
-        
         		 if(count%2==0)
         	        	t.stop();
         		 else
         			 t.start();
         	}
         });
-        
-       
         add(btnClickMe);
-        
         textField = new JTextField();
         textField.setBounds(310, 349, 86, 20);
         add(textField);
         textField.setColumns(10);
-        
         JButton btnNewButton = new JButton("Submit");
-        btnNewButton.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent arg0) {
+        btnNewButton.addActionListener(new ActionListener(){
+        	public void actionPerformed(ActionEvent arg0)
+        	{
                 String s=new String();
                 s=textField.getText();
                 t.stop();
@@ -121,68 +116,28 @@ public class jbc1 extends JPanel {
                 		cx[i]=cx[i-1]+100;
                 		cy[i]=cy[i-1]+100;
                 	}
-                	
-                	//Rectangle oldCircle = new Rectangle(cx - 1, cy - 1, cw + 2, ch + 2);
-                	//repaint(oldCircle);
                 }
         	}
         });
         btnNewButton.setBounds(313, 392, 86, 23);
         add(btnNewButton);
     }
-
-    /*public void animate() {
-        new Timer(15, new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Rectangle oldCircle = new Rectangle(cx - 1, cy - 1, cw + 2, ch + 2);
-                cx += xinc;
-                cy += yinc;
-                if (cx >= getWidth() - cw || cx <= 0) {
-                    xinc *= -1;
-                }
-                if (cy >= getHeight() - ch || cy <= 0) {
-                    yinc *= -1;
-                }
-                repaint(oldCircle);
-                repaint(cx - 1, cy - 1, cw + 2, ch + 2);
-            }
-        }).start();
-    }*/
-
     @Override
-    public void paintComponent(Graphics g) {
+    public void paintComponent(Graphics g)
+    {
         super.paintComponent(g);
         for(int i=0;i<n;i++)
-        	for(int j=0;j<n;j++)
         {
-        		//g.drawOval(cx[i], cy[j], cw, ch);
-        		/*  FontMetrics fm = g.getFontMetrics();
-                  double textWidth = fm.getStringBounds("1", g).getWidth();
-                  g.setColor(Color.WHITE);
-                  g.drawString("1",cx[i],cy[j]
-                                     );
-               //   g.drawString("1",cx[i],cy[j]-5);
-                
-                */
-        		  String text = "1";
-        	        //int centerX = 150, centerY = 100;
-        	        //int ovalWidth = 200, ovalHeight = 100;
-
-        	        // Draw oval
-        	        g.setColor(Color.BLUE);
-        	        g.fillOval(cx[i], cy[j],
-        	                   cw, ch);
-
-        	        // Draw centered text
-        	        FontMetrics fm = g.getFontMetrics();
-        	        double textWidth = fm.getStringBounds(text, g).getWidth();
-        	      g.setColor(Color.WHITE);
-        	        g.drawString(text, (int) (cx[i]+cw/2),
-        	                           (int) (cy[j] +ch/2));
-        }
-      
-        
+            for(int j=0;j<n;j++)
+            {
+            	String text = "1";
+            	g.setColor(Color.BLUE);
+            	g.fillOval(cx[i], cy[j], cw, ch);
+            	FontMetrics fm = g.getFontMetrics();
+            	double textWidth = fm.getStringBounds(text, g).getWidth();
+            	g.setColor(Color.WHITE);
+            	g.drawString(text, (int) (cx[i]+cw/2), (int) (cy[j] +ch/2));
+            }
         }
     }
+}
