@@ -22,16 +22,21 @@ import javax.swing.JTextField;
 public class jbc1 extends JPanel {
 
     private static final long serialVersionUID = 1L;
-    private int []cx;
-    private int []cy;
-    private int cw = 50;
-    private int ch = 50;
+    private int [][]cx;
+    private int ite = 1;
+    private int [][]cy;
+    private int cw = 75;
+    private int ch = 75;
+    private int cr=30;
     private int xinc = 1;
     private int yinc = 1;
     private int count=0;
     private int n=0;
+    private int [][]csx;
+    private int [][]csy;
+    private int [][]cslx;
+    private int [][]csly;
     Timer t;
-    private JTextField textField;
     
     public class pair
     {
@@ -43,7 +48,7 @@ public class jbc1 extends JPanel {
     	}
     }
 
-    pair A[][][] = new pair[10][10][10], B[][][] = new pair[10][3][3]; 
+    pair A[][][] = new pair[10][10][10], B[][][] = new pair[10][3][3], mainBalls[][] = new pair[5][5], aBalls[][] = new pair[5][5], bBalls[][] = new pair[5][5]; 
 
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
@@ -63,10 +68,10 @@ public class jbc1 extends JPanel {
         });
     }
 
-    public jbc1() {
-    	
-    	//System.out.println("FD");
-    	for(int k=0;k<10;k++)
+    public jbc1()
+    {
+    	n = 3;
+    	for(int k=0;k<2*n;k++)
     	{
         	for(int i=0;i<3;i++)
         	{
@@ -78,11 +83,11 @@ public class jbc1 extends JPanel {
         	}    		
     	}
     	int cur = 1;
-    	for(int k=0;k<2;k++)
+    	for(int k=0;k<n-1;k++)
     	{
-        	for(int i=0;i<3;i++)
+        	for(int i=0;i<n;i++)
         	{
-        		for(int j=0;j<3;j++)
+        		for(int j=0;j<n;j++)
         		{
         			if(i > k)
         			{
@@ -111,11 +116,11 @@ public class jbc1 extends JPanel {
         	cur++;
     	}
     	
-    	for(int k=0;k<3;k++)
+    	for(int k=0;k<n;k++)
     	{
-        	for(int i=0;i<3;i++)
+        	for(int i=0;i<n;i++)
         	{
-        		for(int j=0;j<3;j++)
+        		for(int j=0;j<n;j++)
         		{
     				if(A[cur-1][i][j].y == 0)
     					A[cur][i][j] = new pair(A[cur-1][i][j].x, 2);
@@ -129,71 +134,92 @@ public class jbc1 extends JPanel {
         	}
         	cur++;
     	}
-    	for(int k=0;k<=5;k++)
+    	count=0;
+    	mainBalls = new pair()
+    	cx=new int[n][n];
+    	cy=new int[n][n];
+    	csx=new int [n][n];
+    	csy=new int[n][n];
+    	cslx=new int[n][n];
+    	csly=new int [n][n];
+    	
+    	int omg = 100;
+    	for(int i=0;i<n;i++)
     	{
-    		for(int i=0;i<3;i++)
-    		{
-    			for(int j=0;j<3;j++)
-    			{
-    				System.out.print(A[k][i][j].x + ", " + A[k][i][j].y + "     ");
-    			}
-    			System.out.println();
-    		}
-    		System.out.println();
-    		System.out.println();
-    		System.out.println();
+    		mainBalls[0][i] = new pair(200, omg);
+    		aBalls[0][i] = new pair(200, omg + 20);
+    		bBalls[0][i] = new pair(240, omg + 20);
+    		omg+=150;
     	}
-		System.out.println();
-		System.out.println();
-		System.out.println();
-		System.out.println();
-		System.out.println();
-		System.out.println();
-    	for(int k=0;k<=5;k++)
+    	omg = 350;
+    	for(int i=1;i<n;i++)
     	{
-    		for(int i=0;i<3;i++)
+    		mainBalls[i][0] = new pair(omg, 100);
+    		aBalls[i][0] = new pair(omg, 120);
+    		bBalls[i][0] = new pair(omg + 40, 120);
+    		omg+=150;
+    	}
+    	
+    	cx[0][0]=200;
+    	cy[0][0]=100;
+    	csx[0][0]=200;
+    	csy[0][0]=120;
+    	cslx[0][0]=240;
+    	csly[0][0]=120;
+    	for(int i=1;i<n;i++)
+    	{
+    		for(int j=1;j<n;j++)
     		{
-    			for(int j=0;j<3;j++)
-    			{
-    				System.out.print(B[k][i][j].x + ", " + B[k][i][j].y + "     ");
-    			}
-    			System.out.println();
+    			cx[]
     		}
-    		System.out.println();
-    		System.out.println();
-    		System.out.println();
+    	}
+    	for(int i=1;i<n;i++)
+    	{
+    		cx[i]=cx[i-1]+150;
+    		cy[i]=cy[i-1]+150;
+    		csx[i]=cx[i];
+    		csy[i]=cy[i]+20;
+    		cslx[i]=cx[i]+40;
+    		csly[i]=cy[i]+20;
+    		
     	}
         setLayout(null);
         setBackground(Color.BLACK);
         setForeground(Color.RED);
         setOpaque(true);
-		  t=new Timer(15, new ActionListener() {
-
-	            @Override
-	            
-	            public void actionPerformed(ActionEvent e) {
-	               
-	            	for(int i=0;i<n;i++)
-	            	{
-	            	 for(int j=0;j<n;j++)
-	            	 {
-	            	Rectangle oldCircle = new Rectangle(cx[i] - 1, cy[j] - 1, cw + 2, ch + 2);
-	                cx[i] += xinc;
-//	                cy += yinc;
-	                if (cx[i] >= getWidth() - cw || cx[i] <= 0) {
-	                    xinc *= -1;
-	                }
-	                if (cy[j] >= getHeight() - ch || cy[j] <= 0) {
-	                    yinc *= -1;
-	                }
-	                repaint(oldCircle);
-	                repaint(cx[i] - 1, cy[i] - 1, cw + 2, ch + 2);
-	            	
-	            	 }}
-	            	}
-	        });
+		t=new Timer(15, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+            	for(int i=0;i<n;i++)
+            	{
+            		for(int j=0;j<n;j++)
+            		{
+            			System.out.println(csx[j]+" "+i+" "+j+" "+cx[A[ite][i][j].y]+" "+A[ite][i][j].x+" "+A[ite][i][j].y);
+            			
+            			if(csx[j]!=cx[A[ite][i][j].y])
+            			{
+            				
+            			 csx[j] -= xinc;
+//     	                cy += yinc;
+            			 if(csx[j]==cx[A[ite][i][j].y])
+            				 t.stop();
+     	                if (csx[i] >= getWidth() - cr || csx[i] <= 0) {
+     	                   csx[i]=600;
+     	                }
+            			
+            			Rectangle oldCircle = new Rectangle(cx[i] - 1, cy[j] - 1, cw + 2, ch + 2);	//Rectangle oldCircle = new Rectangle(cx[i]+10, cy[j]+30, cw+30 , ch+40 );
+		                repaint(oldCircle);
+		                repaint(cx[i] - 1, cy[i] - 1, cw + 2, ch + 2);
+            			}
+            		}
+            	}
+          //  	ite++;
+            }
+	    });
+		
         JButton btnClickMe = new JButton("|>");
-        btnClickMe.setBounds(105, 341, 45, 36);
+        btnClickMe.setBounds(362, 502, 45, 36);
         btnClickMe.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent arg0) {
         		 count++;
@@ -207,93 +233,31 @@ public class jbc1 extends JPanel {
         
        
         add(btnClickMe);
-        
-        textField = new JTextField();
-        textField.setBounds(310, 349, 86, 20);
-        add(textField);
-        textField.setColumns(10);
-        
-        JButton btnNewButton = new JButton("Submit");
-        btnNewButton.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent arg0) {
-                String s=new String();
-                s=textField.getText();
-                t.stop();
-                if(s.length()!=0)		
-                {
-                	repaint();
-                	count=0;
-                	n=Integer.parseInt(s);
-                	cx=new int[n];
-                	cy=new int[n];
-                	cx[0]=0;
-                	cy[0]=0;
-                	for(int i=1;i<n;i++)
-                	{
-                		cx[i]=cx[i-1]+100;
-                		cy[i]=cy[i-1]+100;
-                	}
-                	
-                	//Rectangle oldCircle = new Rectangle(cx - 1, cy - 1, cw + 2, ch + 2);
-                	//repaint(oldCircle);
-                }
-        	}
-        });
-        btnNewButton.setBounds(313, 392, 86, 23);
-        add(btnNewButton);
     }
-
-    /*public void animate() {
-        new Timer(15, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Rectangle oldCircle = new Rectangle(cx - 1, cy - 1, cw + 2, ch + 2);
-                cx += xinc;
-                cy += yinc;
-                if (cx >= getWidth() - cw || cx <= 0) {
-                    xinc *= -1;
-                }
-                if (cy >= getHeight() - ch || cy <= 0) {
-                    yinc *= -1;
-                }
-                repaint(oldCircle);
-                repaint(cx - 1, cy - 1, cw + 2, ch + 2);
-            }
-        }).start();
-    }*/
 
     @Override
-    public void paintComponent(Graphics g) {
+    public void paintComponent(Graphics g)
+    {
         super.paintComponent(g);
+        //g.setColor(Color.CYAN);
         for(int i=0;i<n;i++)
-        	for(int j=0;j<n;j++)
         {
-        		//g.drawOval(cx[i], cy[j], cw, ch);
-        		/*  FontMetrics fm = g.getFontMetrics();
-                  double textWidth = fm.getStringBounds("1", g).getWidth();
-                  g.setColor(Color.WHITE);
-                  g.drawString("1",cx[i],cy[j]
-                                     );
-               //   g.drawString("1",cx[i],cy[j]-5);
-                
-                */
-        		  String text = "1";
-        	        //int centerX = 150, centerY = 100;
-        	        //int ovalWidth = 200, ovalHeight = 100;
-
-        	        // Draw oval
+        	for(int j=0;j<n;j++)
+        	{
         	        g.setColor(Color.BLUE);
-        	        g.fillOval(cx[i], cy[j],
-        	                   cw, ch);
-
-        	        // Draw centered text
+        	     
+        	        g.fillOval(cx[i], cy[j], cw, ch);
+        	        g.setColor(Color.green);
+        	        g.fillOval(csx[i], csy[j], cr, cr);
+        	        g.setColor(Color.WHITE);
+        	        g.drawString("A", csx[i]+10,csy[j]+20);
+        	        g.setColor(Color.orange);
+        	        g.fillOval(cslx[i], csly[j], cr, cr);
         	        FontMetrics fm = g.getFontMetrics();
-        	        double textWidth = fm.getStringBounds(text, g).getWidth();
-        	      g.setColor(Color.WHITE);
-        	        g.drawString(text, (int) (cx[i]+cw/2),
-        	                           (int) (cy[j] +ch/2));
-        }
-      
-        
+        	        //double textWidth = fm.getStringBounds(text, g).getWidth();
+        	        g.setColor(Color.WHITE);
+        	       
+        	}        	
         }
     }
+}
