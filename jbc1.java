@@ -17,6 +17,7 @@ import javax.swing.SwingConstants;
 import javax.swing.Timer;
 import javax.swing.JButton;
 import javax.swing.JTextField;
+import java.awt.Font;
 
 
 public class jbc1 extends JPanel {
@@ -40,8 +41,8 @@ public class jbc1 extends JPanel {
     
     public class pair
     {
-    	int x, y;
-    	pair(int a, int b)
+    	public int x, y;
+    	public pair(int a, int b)
     	{
     		x = a;
     		y = b;
@@ -70,6 +71,11 @@ public class jbc1 extends JPanel {
 
     public jbc1()
     {
+    	  JLabel label = new JLabel("");
+    	  label.setForeground(Color.WHITE);
+    	  label.setFont(new Font("Tempus Sans ITC", Font.BOLD, 30));
+          label.setBounds(491, 132, 59, 36);
+          add(label);
     	n = 3;
     	for(int k=0;k<2*n;k++)
     	{
@@ -135,7 +141,6 @@ public class jbc1 extends JPanel {
         	cur++;
     	}
     	count=0;
-    	mainBalls = new pair()
     	cx=new int[n][n];
     	cy=new int[n][n];
     	csx=new int [n][n];
@@ -146,45 +151,35 @@ public class jbc1 extends JPanel {
     	int omg = 100;
     	for(int i=0;i<n;i++)
     	{
-    		mainBalls[0][i] = new pair(200, omg);
-    		aBalls[0][i] = new pair(200, omg + 20);
-    		bBalls[0][i] = new pair(240, omg + 20);
+    		mainBalls[0][i] = new pair(omg, 200);
+    		aBalls[0][i] = new pair(omg + 20, 200);
+    		bBalls[0][i] = new pair(omg + 20, 240);
     		omg+=150;
     	}
     	omg = 350;
     	for(int i=1;i<n;i++)
     	{
-    		mainBalls[i][0] = new pair(omg, 100);
-    		aBalls[i][0] = new pair(omg, 120);
-    		bBalls[i][0] = new pair(omg + 40, 120);
+    		mainBalls[i][0] = new pair(100, omg);
+    		aBalls[i][0] = new pair(120, omg);
+    		bBalls[i][0] = new pair(120, omg + 40);
     		omg+=150;
     	}
-    	
-    	cx[0][0]=200;
-    	cy[0][0]=100;
-    	csx[0][0]=200;
-    	csy[0][0]=120;
-    	cslx[0][0]=240;
-    	csly[0][0]=120;
+    	int om = 250;
+    	omg = 200;
     	for(int i=1;i<n;i++)
     	{
+    		om = 250;
+    		omg+=150;
     		for(int j=1;j<n;j++)
     		{
-    			cx[]
+        		mainBalls[i][j] = new pair(om, omg);
+        		aBalls[i][j] = new pair(om +20, omg);
+        		bBalls[i][j] = new pair(om + 20, omg + 40);
+        		om+=150;
     		}
     	}
-    	for(int i=1;i<n;i++)
-    	{
-    		cx[i]=cx[i-1]+150;
-    		cy[i]=cy[i-1]+150;
-    		csx[i]=cx[i];
-    		csy[i]=cy[i]+20;
-    		cslx[i]=cx[i]+40;
-    		csly[i]=cy[i]+20;
-    		
-    	}
         setLayout(null);
-        setBackground(Color.BLACK);
+        setBackground(Color.DARK_GRAY);
         setForeground(Color.RED);
         setOpaque(true);
 		t=new Timer(15, new ActionListener() {
@@ -195,31 +190,58 @@ public class jbc1 extends JPanel {
             	{
             		for(int j=0;j<n;j++)
             		{
-            			System.out.println(csx[j]+" "+i+" "+j+" "+cx[A[ite][i][j].y]+" "+A[ite][i][j].x+" "+A[ite][i][j].y);
+            	//		System.out.println(i+" "+j+" "+mainBalls[A[ite][i][j].y][A[ite][i][j].x].x+" "+aBalls[i][j].x+" "+mainBalls[A[ite][i][j].y][A[ite][i][j].x].y+" "+aBalls[i][j].y+" "+A[ite][i][j].x+" "+A[ite][i][j].y);
+            			if(aBalls[i][j].x != mainBalls[A[ite][i][j].x][A[ite][i][j].y].x+20)
+            			aBalls[i][j].x--;
+            			if(aBalls[i][j].x<0)
+            				aBalls[i][j].x=mainBalls[A[ite][i][j].x][A[ite][i][j].y].x+50;
             			
-            			if(csx[j]!=cx[A[ite][i][j].y])
-            			{
-            				
-            			 csx[j] -= xinc;
-//     	                cy += yinc;
-            			 if(csx[j]==cx[A[ite][i][j].y])
-            				 t.stop();
-     	                if (csx[i] >= getWidth() - cr || csx[i] <= 0) {
-     	                   csx[i]=600;
-     	                }
-            			
-            			Rectangle oldCircle = new Rectangle(cx[i] - 1, cy[j] - 1, cw + 2, ch + 2);	//Rectangle oldCircle = new Rectangle(cx[i]+10, cy[j]+30, cw+30 , ch+40 );
+            			Rectangle oldCircle = new Rectangle(mainBalls[i][j].x - 1, mainBalls[i][j].y - 1, cw + 2, ch + 2);
 		                repaint(oldCircle);
-		                repaint(cx[i] - 1, cy[i] - 1, cw + 2, ch + 2);
-            			}
+		                repaint(mainBalls[i][j].x - 1, mainBalls[i][j].y - 1, cw + 2, ch + 2);
             		}
             	}
-          //  	ite++;
+            	
+             	for(int i=0;i<n;i++)
+            	{
+            		for(int j=0;j<n;j++)
+            		{
+            			System.out.println(i+" "+j+" "+mainBalls[A[ite][i][j].y][A[ite][i][j].x].x+" "+aBalls[i][j].x+" "+mainBalls[A[ite][i][j].y][A[ite][i][j].x].y+" "+aBalls[i][j].y+" "+A[ite][i][j].x+" "+A[ite][i][j].y);
+            			if(bBalls[i][j].y != mainBalls[B[ite][i][j].x][B[ite][i][j].y].y+40)
+            			bBalls[i][j].y--;
+            			if(bBalls[i][j].y<90)
+            				bBalls[i][j].y=mainBalls[B[ite][i][j].x][B[ite][i][j].y].y+50;
+            			
+            			Rectangle oldCircle = new Rectangle(mainBalls[i][j].x - 1, mainBalls[i][j].y - 1, cw + 2, ch + 2);
+		                repaint(oldCircle);
+		                repaint(mainBalls[i][j].x - 1, mainBalls[i][j].y - 1, cw + 2, ch + 2);
+            		}
+            	}
+            	int count=0;
+            	for(int i=0;i<n;i++)
+            		for(int j=0;j<n;j++)
+            		{
+            			if(bBalls[i][j].y != mainBalls[B[ite][i][j].x][B[ite][i][j].y].y+40)
+            				count=1;
+            			if(aBalls[i][j].x != mainBalls[A[ite][i][j].x][A[ite][i][j].y].x+20)
+            				count=1;
+            			
+            		}
+            	
+            	if(count==0)
+            		ite++;
+            	
+            	
+            	label.setText(ite+" ");
+            	if(ite==5)
+            		t.stop();
             }
-	    });
+          //  	ite++;
+        }
+	    );
 		
         JButton btnClickMe = new JButton("|>");
-        btnClickMe.setBounds(362, 502, 45, 36);
+        btnClickMe.setBounds(352, 532, 45, 36);
         btnClickMe.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent arg0) {
         		 count++;
@@ -233,6 +255,8 @@ public class jbc1 extends JPanel {
         
        
         add(btnClickMe);
+        
+      
     }
 
     @Override
@@ -244,17 +268,20 @@ public class jbc1 extends JPanel {
         {
         	for(int j=0;j<n;j++)
         	{
-        	        g.setColor(Color.BLUE);
+        	        //g.setColor(Color.BLUE);
         	     
-        	        g.fillOval(cx[i], cy[j], cw, ch);
+        	        g.drawOval(mainBalls[i][j].x, mainBalls[i][j].y, cw, ch);
         	        g.setColor(Color.green);
-        	        g.fillOval(csx[i], csy[j], cr, cr);
+        	        g.fillOval(aBalls[i][j].x, aBalls[i][j].y, cr, cr);
         	        g.setColor(Color.WHITE);
-        	        g.drawString("A", csx[i]+10,csy[j]+20);
+        	        g.drawString("A"+i+j, aBalls[i][j].x+10,aBalls[i][j].y+20);
         	        g.setColor(Color.orange);
-        	        g.fillOval(cslx[i], csly[j], cr, cr);
+        	        g.fillOval(bBalls[i][j].x, bBalls[i][j].y, cr, cr);
+        	        g.setColor(Color.WHITE);
+        	        g.drawString("B"+i+j, bBalls[i][j].x+10,bBalls[i][j].y+20);
         	        FontMetrics fm = g.getFontMetrics();
         	        //double textWidth = fm.getStringBounds(text, g).getWidth();
+        	        
         	        g.setColor(Color.WHITE);
         	       
         	}        	
