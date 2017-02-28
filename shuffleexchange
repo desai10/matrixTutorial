@@ -1,0 +1,358 @@
+package jbc;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.EventQueue;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+import javax.swing.Timer;
+import javax.swing.JButton;
+import javax.swing.JTextField;
+import java.awt.Font;
+
+
+public class jbc1 extends JPanel {
+  int count=0;
+  Timer t;
+  int ite=1;
+	int itep=1;
+  
+  class nextd
+  {
+	  public int next;
+	  
+	    public nextd(int y)
+	    {
+	    	next=y;
+	    }
+  }
+  
+  class coordinate
+  {
+	  public int x;
+	  public int y;
+	  
+	  public coordinate(int i,int j)
+	  {
+		  x=i;
+		  y=j;
+		  
+	  }
+	  
+  }
+  class target
+  {
+	  public int s;
+	  public int d;
+	  
+	  public target(int i,int j)
+	  {
+		  s=i;
+		  d=j;
+	  }
+	  
+	  
+  }
+  
+  
+  
+  nextd b[][]=new nextd[10][10];
+  coordinate aball[]=new coordinate [10];
+  coordinate bball[]=new coordinate [10];
+  coordinate mball[]=new coordinate [10];
+  int caball[][][]=new int[20][20][20];
+  target ba[]=new target[17];
+  coordinate amovball[]=new coordinate [10];
+  coordinate bmovball[]=new coordinate [10];
+  
+  public static void main(String[] args) {
+        EventQueue.invokeLater(new Runnable() {
+
+            @Override
+            public void run() {
+                jbc1 panel = new jbc1();
+                panel.setPreferredSize(new Dimension(900, 700));
+//                panel.animate();
+                JFrame frame = new JFrame("Test");
+                frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                frame.getContentPane().add(panel);
+                frame.pack();
+                frame.setLocationRelativeTo(null);
+                frame.setVisible(true);
+            }
+        });
+    }
+
+    public jbc1()
+    {
+    	  JLabel label = new JLabel("");
+    	  label.setForeground(Color.WHITE);
+    	  label.setFont(new Font("Tempus Sans ITC", Font.BOLD, 30));
+          label.setBounds(491, 132, 59, 36);
+          add(label);
+       
+        	 for(int j=0;j<8;j++)
+        	 {
+        		
+        		          if(j!=1)
+        				  b[1][j]=new nextd(2);
+        		        
+        		          if(j!=0)
+        		          b[0][j]=new nextd(1);
+        		          
+        		          if(j!=7)
+        		        	 b[7][j]=new nextd(6); 
+        		          
+        		           if(j<6)
+        		        	   b[6][j]=new nextd(5);
+        		 
+        		           
+        		           if(j<4)
+        		        	   b[4][j]=new nextd(1);
+        		           
+        		           if(j<3)
+        		        	   b[3][j]=new nextd(2);
+        		           if(j<2)
+        		        	   b[2][j]=new nextd(4);
+        		           
+        	 }
+        	 for(int j=0;j<8;j++)
+             b[j][j]=new nextd(j);
+        	 
+        	 b[2][3]=new nextd(3);
+        	 b[2][6]=new nextd(3);
+        	 b[2][7]=new nextd(3);
+        	 b[2][4]=new nextd(4);
+        	 b[2][5]=new nextd(4);
+        	 b[3][4]=new nextd(2);
+        	 b[3][5]=new nextd(2);
+        	 b[3][6]=new nextd(6);
+        	 b[3][7]=new nextd(6);
+        	 b[4][5]=new nextd(5);
+        	 b[4][6]=new nextd(1);
+        	 b[4][7]=new nextd(1);
+        	 b[5][6]=new nextd(3);
+        	 b[5][7]=new nextd(3);
+             b[6][7]=new nextd(7);
+             
+             for(int j=7;j>0;j--)
+             {
+            	 if(j!=4||j!=2)
+            	 {
+            		 
+            		 b[j][j-1]=new nextd(j-1);
+            		 
+            	 }
+            	 
+             }
+             
+             b[5][4]=new nextd(4);
+             b[5][3]=new nextd(3);
+             b[5][2]=new nextd(3);
+             b[5][1]=new nextd(4);
+             b[5][0]=new nextd(0);
+             b[1][0]=new nextd(0);
+             
+        	 
+        	 
+    	int om = 20;
+    	
+    	
+    	for(int i=0;i<8;i++)
+    	{
+    	
+    		
+    		mball[i]=new coordinate(om,300);
+    		aball[i]=new coordinate(om+20,300);
+    		bball[i]=new coordinate(om+20,345);
+    		om+=115;
+    	amovball[i]=aball[i];
+    	bmovball[i]=bball[i];
+    		
+    		
+    	}
+    	
+    	ba[0]=new target(0,4);
+    	ba[1]=new target(1,5);
+    	ba[2]=new target(2,6);
+        ba[3]=new target(3,7);
+    	ba[4]=new target(0,1);
+    	ba[5]=new target(2,3);
+    	ba[6]=new target(5,4);
+    	ba[7]=new target(7,6);
+    	ba[8]=new target(0,2);
+    	ba[9]=new target(1,3);
+    	ba[10]=new target(6,4);
+    	ba[11]=new target(7,5);
+    	ba[12]=new target(0,4);
+    	ba[13]=new target(1,5);
+    	ba[14]=new target(2,6);
+        ba[15]=new target(3,7);	
+    	for(int i=1;i<=4;i++)
+    	{
+    		 int []c=new int[5];
+			 if(i==1)
+			 {
+				
+				 c[0]=ba[0].s;
+				 c[1]=ba[1].s;
+				 c[2]=ba[2].s;
+				 c[3]=ba[3].s;
+			 }
+   			 if(i==2)
+			 {
+				
+				 c[0]=ba[4].s;
+				 c[1]=ba[5].s;
+				 c[2]=ba[6].s;
+				 c[3]=ba[7].s;
+			 }
+   			 if(i==3)
+			 {
+				
+				 c[0]=ba[8].s;
+				 c[1]=ba[9].s;
+				 c[2]=ba[10].s;
+				 c[3]=ba[11].s;
+			 }
+   			 if(i==4)
+			 {
+				
+				 c[0]=ba[0].s;
+				 c[1]=ba[1].s;
+				 c[2]=ba[2].s;
+				 c[3]=ba[3].s;
+			 }
+			
+    		
+    		for(int j=1;j<=5;j++)
+    		{
+    				 for(int k=0;k<4;k++)
+    				 {
+    					 
+    					 caball[i][j][ba[(i-1)*4+k].s]=b[c[k]][ba[(i-1)*4+k].d].next;
+    					 c[k]=b[c[k]][ba[(i-1)*4+k].d].next;
+    					 
+    					 
+    				 }
+    				 
+    				 
+    				 
+    			 
+    	             
+    			
+    			
+    			
+    		}
+    		
+    		
+    	}
+    	
+    	for(int i=1;i<=4;i++)
+    		for(int j=1;j<=5;j++)
+    			for(int k=0;k<4;k++)
+    				System.out.println(caball[i][j][ba[4*(i-1)+k].s]+" "+i+" "+j+" "+k);
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+        setLayout(null);
+        setBackground(Color.DARK_GRAY);
+        setForeground(Color.RED);
+        setOpaque(true);
+		t=new Timer(15, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+            	
+            	System.out.println("FDfd");
+            int count=0;
+                     for(int k=0;k<4;k++)
+                      {
+                    	 System.out.println(mball[caball[ite][itep][ba[4*(ite-1)+k].s]].x+" "+aball[ba[4*(ite-1)+k].s].x+" "+ba[4*(ite-1)+k].s+" "+caball[ite][itep][ba[4*(ite-1)+k].s]+" "+ite+" "+itep);
+            	          if(mball[caball[ite][itep][ba[4*(ite-1)+k].s]].x+20!=amovball[ba[4*(ite-1)+k].s].x&&ite!=3)
+            	          {
+            	        	  count=1;
+            	        	  if(mball[caball[ite][itep][ba[4*(ite-1)+k].s]].x+20>amovball[ba[4*(ite-1)+k].s].x)
+            	        	  { 
+            	        		  amovball[ba[4*(ite-1)+k].s].x++;
+            	        	  
+            	        	  }
+            	        	  else
+            	        	  {
+            	        		  amovball[ba[4*(ite-1)+k].s].x--;
+            	        	  }
+            	        	  
+            	        	  
+            	          }
+            	                    	
+                      }
+            	if(count==0)
+                  itep++;
+                  if(itep==5)
+                  {
+                	  itep=1;
+                	  ite++;
+                	  
+                  }
+                  if(ite==5)
+                	  t.stop();
+                  
+            	
+            	repaint();
+              }
+		}
+	    );
+		
+        JButton btnClickMe = new JButton("|>");
+        btnClickMe.setBounds(352, 532, 45, 36);
+        btnClickMe.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent arg0) {
+        		 count++;
+        
+        		 if(count%2==0)
+        	        	t.stop();
+        		 else
+        			 t.start();
+        	}
+        });
+        
+       
+        add(btnClickMe);
+        
+      
+    }
+
+    @Override
+    public void paintComponent(Graphics g)
+    {
+        super.paintComponent(g);
+        
+        for(int i=0;i<8;i++)
+        {
+        	
+        	
+        	g.drawOval(mball[i].x,mball[i].y,75,75);
+        	
+        	g.drawOval(aball[i].x,aball[i].y,25,25);
+        	
+        	g.drawOval(bball[i].x,bball[i].y,25,25);
+        	g.drawOval(amovball[i].x,amovball[i].y,25,25);
+        }
+        //g.setColor(Color.CYAN);
+        
+    }
+}
