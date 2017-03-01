@@ -25,7 +25,8 @@ public class jbc1 extends JPanel {
   Timer t;
   int ite=1;
 	int itep=1;
-  
+  double te=0;
+  int []nt;
   class nextd
   {
 	  public int next;
@@ -73,7 +74,8 @@ public class jbc1 extends JPanel {
   target ba[]=new target[17];
   coordinate amovball[]=new coordinate [10];
   coordinate bmovball[]=new coordinate [10];
-  
+ int []ntx=new int[12];
+ int [][]adj=new int[15][15];
   public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
 
@@ -174,12 +176,27 @@ public class jbc1 extends JPanel {
     		mball[i]=new coordinate(om,300);
     		aball[i]=new coordinate(om+20,300);
     		bball[i]=new coordinate(om+20,345);
-    		om+=115;
-    	amovball[i]=aball[i];
+    		
+    	amovball[i]=new coordinate(om+20,300);
     	bmovball[i]=bball[i];
+    	om+=115;
     		
     		
     	}
+    	
+    	adj[0][1]=0;
+    	adj[1][2]=1;
+    	adj[2][3]=0;
+    	adj[2][4]=1;
+    	adj[3][6]=1;
+    	adj[4][5]=0;
+    	adj[6][7]=0;
+    	adj[7][6]=0;
+    	adj[6][5]=1;
+    	adj[5][3]=1;
+    	adj[4][1]=1;
+    	adj[3][2]=0;
+    	adj[1][0]=0;
     	
     	ba[0]=new target(0,4);
     	ba[1]=new target(1,5);
@@ -196,7 +213,12 @@ public class jbc1 extends JPanel {
     	ba[12]=new target(0,4);
     	ba[13]=new target(1,5);
     	ba[14]=new target(2,6);
-        ba[15]=new target(3,7);	
+        ba[15]=new target(3,7);
+        ntx[0]=ba[0].s;
+        ntx[1]=ba[1].s;
+        ntx[2]=ba[2].s;
+        ntx[3]=ba[3].s;
+        
     	for(int i=1;i<=4;i++)
     	{
     		 int []c=new int[5];
@@ -273,7 +295,7 @@ public class jbc1 extends JPanel {
         setBackground(Color.DARK_GRAY);
         setForeground(Color.RED);
         setOpaque(true);
-		t=new Timer(15, new ActionListener() {
+		t=new Timer(10, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e)
             {
@@ -282,30 +304,72 @@ public class jbc1 extends JPanel {
             int count=0;
                      for(int k=0;k<4;k++)
                       {
-                    	 System.out.println(mball[caball[ite][itep][ba[4*(ite-1)+k].s]].x+" "+aball[ba[4*(ite-1)+k].s].x+" "+ba[4*(ite-1)+k].s+" "+caball[ite][itep][ba[4*(ite-1)+k].s]+" "+ite+" "+itep);
-            	          if(mball[caball[ite][itep][ba[4*(ite-1)+k].s]].x+20!=amovball[ba[4*(ite-1)+k].s].x&&ite!=3)
-            	          {
-            	        	  count=1;
-            	        	  if(mball[caball[ite][itep][ba[4*(ite-1)+k].s]].x+20>amovball[ba[4*(ite-1)+k].s].x)
-            	        	  { 
-            	        		  amovball[ba[4*(ite-1)+k].s].x++;
-            	        	  
-            	        	  }
-            	        	  else
-            	        	  {
-            	        		  amovball[ba[4*(ite-1)+k].s].x--;
-            	        	  }
-            	        	  
-            	        	  
-            	          }
+                    	 System.out.println(ntx[k]+" "+mball[caball[ite][itep][ba[4*(ite-1)+k].s]].x+" "+aball[ba[4*(ite-1)+k].s].x+" "+ba[4*(ite-1)+k].s+" "+caball[ite][itep][ba[4*(ite-1)+k].s]+" "+ite+" "+itep);
+                    	 if(mball[caball[ite][itep][ba[4*(ite-1)+k].s]].x+20!=amovball[ba[4*(ite-1)+k].s].x&&ite!=3)
+           	          {
+                    	 count=1;
+       	        	  if(mball[caball[ite][itep][ba[4*(ite-1)+k].s]].x+20>amovball[ba[4*(ite-1)+k].s].x)
+       	        	  { 
+       	        		  if(adj[ntx[k]][caball[ite][itep][ba[4*(ite-1)+k].s]]==1)
+       	        		  {
+       	        		   int a=(mball[caball[ite][itep][ba[4*(ite-1)+k].s]].x-mball[ntx[k]].x)/2;
+       	        		  int b=(mball[caball[ite][itep][ba[4*(ite-1)+k].s]].x+mball[ntx[k]].x+40)/2;
+       	        		  amovball[ba[4*(ite-1)+k].s].x=b-(int) Math.round(a*Math.cos(Math.toRadians(te)));
+       	        		  amovball[ba[4*(ite-1)+k].s].y=300-(int) Math.round(50*Math.sin(Math.toRadians(te)));
+       	        		  amovball[ba[4*(ite-1)+k].s].x++;
+       	        		  }
+       	        		  else
+       	        			amovball[ba[4*(ite-1)+k].s].x++;  
+       	        	  }
+       	        	  else
+       	        	  {
+       	        		  
+       	        		  
+       	        		  amovball[ba[4*(ite-1)+k].s].x--;
+       	        	  }
+       	        	  
             	                    	
                       }
+                    	 else
+                    		 amovball[ba[4*(ite-1)+k].s].y=300; 
+                      }
+                     te+=0.8;
             	if(count==0)
-                  itep++;
+                  {
+            		te=0;
+            		itep++;
+            		for(int k=0;k<4;k++)
+            		ntx[k]=b[ntx[k]][ba[(ite-1)*4+k].d].next;
+                  }
                   if(itep==5)
                   {
                 	  itep=1;
                 	  ite++;
+                		 if(ite==2)
+            			 {
+            				
+            				 ntx[0]=ba[4].s;
+            				 ntx[1]=ba[5].s;
+            				 ntx[2]=ba[6].s;
+            				 ntx[3]=ba[7].s;
+            			 }
+               			 if(ite==3)
+            			 {
+            				
+            				 ntx[0]=ba[8].s;
+            				 ntx[1]=ba[9].s;
+            				 ntx[2]=ba[10].s;
+            				 ntx[3]=ba[11].s;
+            			 }
+               			 if(ite==4)
+            			 {
+            				
+            				 ntx[0]=ba[0].s;
+            				 ntx[1]=ba[1].s;
+            				 ntx[2]=ba[2].s;
+            				 ntx[3]=ba[3].s;
+            			 }
+                	  
                 	  
                   }
                   if(ite==5)
