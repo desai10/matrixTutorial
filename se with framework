@@ -1,0 +1,1110 @@
+package jbc;
+
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.EventQueue;
+import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.Timer;
+
+
+
+import javax.swing.JButton;
+import javax.swing.JTextField;
+import java.awt.Font;
+
+public class jbc1 extends JPanel
+{
+	private static final long serialVersionUID = 1L;
+
+	  int count=0;
+	  Timer t;
+	  int ite=1;
+		int itep=1;
+	  double te=0;
+	  int r=25;
+	  int []nt;
+	  int check=0;
+	  int terminating=0;
+	  class nextd
+	  {
+		  public int next;
+		  
+		    public nextd(int y)
+		    {
+		    	next=y;
+		    }
+	  }
+	  
+	  class coordinate
+	  {
+		  public int x;
+		  public int y;
+		  
+		  public coordinate(int i,int j)
+		  {
+			  x=i;
+			  y=j;
+			  
+		  }
+		  
+	  }
+	  class target
+	  {
+		  public int s;
+		  public int d;
+		  
+		  public target(int i,int j)
+		  {
+			  s=i;
+			  d=j;
+		  }
+		  
+		  
+	  }
+	  
+	  
+	  
+	  nextd b[][]=new nextd[10][10];
+	  coordinate aball[]=new coordinate [10];
+	  coordinate bball[]=new coordinate [10];
+	  coordinate mball[]=new coordinate [10];
+	  int caball[][][]=new int[20][20][20];
+	  int cbball[][][]=new int[20][20][20];
+	  target ba[]=new target[17];
+	  coordinate amovball[]=new coordinate [10];
+	  coordinate bmovball[]=new coordinate [10];
+	 int []ntx=new int[12];
+	 int [][]adj=new int[15][15];
+	 int [][]ina=new int [8][8];
+	 int [][]inb=new int [8][8];
+	 
+	 int [][]defa=new int[8][8];
+	 int [][]defb=new int[8][8];
+    private JTextField textField_12;
+    private JTextField textField_13;
+    private JTextField textField_14;
+    private JTextField textField_15;
+    private JTextField textField_22;
+    private JTextField textField_23;
+    private JTextField textField_30;
+    private JTextField textField_31;
+    private JTextField textField_38;
+    private JTextField textField_39;
+    private JTextField textField_47;
+    private JTextField textField_48;
+  
+    private JTextField textField;
+
+    public static void main(String[] args)
+    {
+        EventQueue.invokeLater(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                 jbc1 panel = new jbc1();
+                panel.setPreferredSize(new Dimension(920, 680));
+                JFrame frame = new JFrame("Test");
+                frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                frame.getContentPane().add(panel);
+                frame.pack();
+                frame.setLocationRelativeTo(null);
+                frame.setVisible(true);
+               
+            }
+        });
+    }
+
+    public jbc1()
+    {
+    	   ina[0][0]=1;
+           ina[0][1]=3;
+           ina[1][0]=-8;
+           ina[1][1]=4;
+           inb[0][0]=2;
+           inb[0][1]=4;
+           inb[1][0]=9;
+           inb[1][1]=-6;    
+           defa[0][0]=1;
+           defa[0][1]=3;
+           defa[1][0]=-8;
+           defa[1][1]=4;
+           defb[0][0]=2;
+           defb[0][1]=4;
+           defb[1][0]=9;
+           defb[1][1]=-6;     
+           
+           
+           for(int j=0;j<8;j++)
+         	 {
+         		
+         		          if(j!=1)
+         				  b[1][j]=new nextd(2);
+         		        
+         		          if(j!=0)
+         		          b[0][j]=new nextd(1);
+         		          
+         		          if(j!=7)
+         		        	 b[7][j]=new nextd(6); 
+         		          
+         		           if(j<6)
+         		        	   b[6][j]=new nextd(5);
+         		 
+         		           
+         		           if(j<4)
+         		        	   b[4][j]=new nextd(1);
+         		           
+         		           if(j<3)
+         		        	   b[3][j]=new nextd(2);
+         		           if(j<2)
+         		        	   b[2][j]=new nextd(4);
+         		           
+         	 }
+         	 for(int j=0;j<8;j++)
+              b[j][j]=new nextd(j);
+         	 
+         	 b[2][3]=new nextd(3);
+         	 b[2][6]=new nextd(3);
+         	 b[2][7]=new nextd(3);
+         	 b[2][4]=new nextd(4);
+         	 b[2][5]=new nextd(4);
+         	 b[3][4]=new nextd(2);
+         	 b[3][5]=new nextd(2);
+         	 b[3][6]=new nextd(6);
+         	 b[3][7]=new nextd(6);
+         	 b[4][5]=new nextd(5);
+         	 b[4][6]=new nextd(1);
+         	 b[4][7]=new nextd(1);
+         	 b[5][6]=new nextd(3);
+         	 b[5][7]=new nextd(3);
+              b[6][7]=new nextd(7);
+              
+              for(int j=7;j>0;j--)
+              {
+             	 if(j!=4||j!=2)
+             	 {
+             		 
+             		 b[j][j-1]=new nextd(j-1);
+             		 
+             	 }
+             	 
+              }
+              
+              b[5][4]=new nextd(4);
+              b[5][3]=new nextd(3);
+              b[5][2]=new nextd(3);
+              b[5][1]=new nextd(4);
+              b[5][0]=new nextd(0);
+              b[1][0]=new nextd(0);
+              
+        
+     	int om = 20;
+     	
+     	
+     	for(int i=0;i<8;i++)
+     	{
+     	
+     		
+     		mball[i]=new coordinate(om,300);
+     		aball[i]=new coordinate(om+20,300);
+     		bball[i]=new coordinate(om+20,345);
+     		
+     	amovball[i]=new coordinate(om+20,300);
+     	bmovball[i]=bball[i];
+     	om+=115;
+     		
+     		
+     	}
+     	
+     	adj[0][1]=0;
+     	adj[1][2]=1;
+     	adj[2][3]=0;
+     	adj[2][4]=1;
+     	adj[3][6]=1;
+     	adj[4][5]=0;
+     	adj[6][7]=0;
+     	adj[7][6]=0;
+     	adj[6][5]=1;
+     	adj[5][3]=1;
+     	adj[4][1]=1;
+     	adj[3][2]=0;
+     	adj[1][0]=0;
+     	
+     	ba[0]=new target(0,4);
+     	ba[1]=new target(1,5);
+     	ba[2]=new target(2,6);
+         ba[3]=new target(3,7);
+     	ba[4]=new target(0,1);
+     	ba[5]=new target(2,3);
+     	ba[6]=new target(5,4);
+     	ba[7]=new target(7,6);
+     	ba[8]=new target(0,2);
+     	ba[9]=new target(1,3);
+     	ba[10]=new target(6,4);
+     	ba[11]=new target(7,5);
+     	ba[12]=new target(0,4);
+     	ba[13]=new target(1,5);
+     	ba[14]=new target(2,6);
+         ba[15]=new target(3,7);
+         ntx[0]=ba[0].s;
+         ntx[1]=ba[1].s;
+         ntx[2]=ba[2].s;
+         ntx[3]=ba[3].s;
+         
+     	for(int i=1;i<=4;i++)
+     	{
+     		 int []c=new int[5];
+ 			 if(i==1)
+ 			 {
+ 				
+ 				 c[0]=ba[0].s;
+ 				 c[1]=ba[1].s;
+ 				 c[2]=ba[2].s;
+ 				 c[3]=ba[3].s;
+ 			 }
+    			 if(i==2)
+ 			 {
+ 				
+ 				 c[0]=ba[4].s;
+ 				 c[1]=ba[5].s;
+ 				 c[2]=ba[6].s;
+ 				 c[3]=ba[7].s;
+ 			 }
+    			 if(i==3)
+ 			 {
+ 				
+ 				 c[0]=ba[8].s;
+ 				 c[1]=ba[9].s;
+ 				 c[2]=ba[10].s;
+ 				 c[3]=ba[11].s;
+ 			 }
+    			 if(i==4)
+ 			 {
+ 				
+ 				 c[0]=ba[0].s;
+ 				 c[1]=ba[1].s;
+ 				 c[2]=ba[2].s;
+ 				 c[3]=ba[3].s;
+ 			 }
+ 			
+     		
+     		for(int j=1;j<=5;j++)
+     		{
+     				 for(int k=0;k<4;k++)
+     				 {
+     					 if(i!=3)
+     					 caball[i][j][ba[(i-1)*4+k].s]=b[c[k]][ba[(i-1)*4+k].d].next;
+     					 
+     					 if(i!=2)
+     						 cbball[i][j][ba[(i-1)*4+k].s]=b[c[k]][ba[(i-1)*4+k].d].next;
+     					 c[k]=b[c[k]][ba[(i-1)*4+k].d].next;
+     					 
+     					 
+     				 }
+     				 
+     				 
+     				 
+     			 
+     	             
+     			
+     			
+     			
+     		}
+     		
+     		
+     	}
+     	
+     	for(int i=1;i<=4;i++)
+     		for(int j=1;j<=5;j++)
+     			for(int k=0;k<4;k++)
+     				System.out.println(caball[i][j][ba[4*(i-1)+k].s]+" "+i+" "+j+" "+k);
+        setLayout(null);
+        setBackground(Color.LIGHT_GRAY);
+        setForeground(Color.RED);
+        setOpaque(true);
+		t=new Timer(20, new ActionListener()
+		{
+	            @Override
+	            public void actionPerformed(ActionEvent e)
+	            {   
+	             	
+	            	//System.out.println("FDfd");
+	            int count=0;
+	            if(ite!=4)
+	            {
+	                     for(int k=0;k<4;k++)
+	                      {
+	                    //	 System.out.println(ntx[k]+" "+mball[caball[ite][itep][ba[4*(ite-1)+k].s]].x+" "+aball[ba[4*(ite-1)+k].s].x+" "+ba[4*(ite-1)+k].s+" "+caball[ite][itep][ba[4*(ite-1)+k].s]+" "+ite+" "+itep);
+	                    	 if(mball[caball[ite][itep][ba[4*(ite-1)+k].s]].x+20!=amovball[ba[4*(ite-1)+k].s].x&&ite!=3)
+	           	          {
+	                    	 count=1;
+	       	        if(mball[caball[ite][itep][ba[4*(ite-1)+k].s]].x+20>amovball[ba[4*(ite-1)+k].s].x)
+	       	        	  { 
+	       	        		  if(adj[ntx[k]][caball[ite][itep][ba[4*(ite-1)+k].s]]==1)
+	       	        		  {
+	       	        		   int a=(mball[caball[ite][itep][ba[4*(ite-1)+k].s]].x-mball[ntx[k]].x)/2;
+	       	        		  int b=(mball[caball[ite][itep][ba[4*(ite-1)+k].s]].x+mball[ntx[k]].x+40)/2;
+	       	        		  amovball[ba[4*(ite-1)+k].s].x=b-(int) Math.round(a*Math.cos(Math.toRadians(te)));
+	       	        		  amovball[ba[4*(ite-1)+k].s].y=300-(int) Math.round(50*Math.sin(Math.toRadians(te)));
+	       	        		  amovball[ba[4*(ite-1)+k].s].x++;
+	       	        		  }
+	       	        		  else
+	       	        			amovball[ba[4*(ite-1)+k].s].x++;  
+	       	        	  }
+	       	        	  else
+	       	        	  {
+	       	        		  
+	       	        		if(adj[ntx[k]][caball[ite][itep][ba[4*(ite-1)+k].s]]==0)
+	       	        		  amovball[ba[4*(ite-1)+k].s].x--;
+	       	        		else
+	       	        		{
+	       	        			int a=(mball[ntx[k]].x-mball[caball[ite][itep][ba[4*(ite-1)+k].s]].x)/2;
+	         	        		  int b=(mball[caball[ite][itep][ba[4*(ite-1)+k].s]].x+mball[ntx[k]].x+40)/2;
+	         	        		  amovball[ba[4*(ite-1)+k].s].x=b+(int) Math.round(a*Math.cos(Math.toRadians(te)));
+	         	        		  amovball[ba[4*(ite-1)+k].s].y=300-(int) Math.round(50*Math.sin(Math.toRadians(te)));
+	         	        		  amovball[ba[4*(ite-1)+k].s].x--;
+	       	        			
+	       	        		}
+	       	        	  }
+	       	        	  
+	            	                    	
+	                      }
+	                    	 else
+	                    		 amovball[ba[4*(ite-1)+k].s].y=300; 
+	                      }
+	                     
+	                     for(int k=0;k<4;k++)
+	                     {
+	                   	System.out.println(ntx[k]+" "+mball[cbball[ite][itep][ba[4*(ite-1)+k].s]].x+" "+bmovball[ba[4*(ite-1)+k].s].x+" "+ba[4*(ite-1)+k].s+" "+cbball[ite][itep][ba[4*(ite-1)+k].s]+" "+ite+" "+itep);
+	                   	 if(mball[cbball[ite][itep][ba[4*(ite-1)+k].s]].x+20!=bmovball[ba[4*(ite-1)+k].s].x&&ite!=2&&terminating!=1)
+	          	          {
+	                   	 count=1;
+	      	        	  if(mball[cbball[ite][itep][ba[4*(ite-1)+k].s]].x+20>bmovball[ba[4*(ite-1)+k].s].x)
+	      	        	  { 
+	      	        		  if(adj[ntx[k]][cbball[ite][itep][ba[4*(ite-1)+k].s]]==1)
+	      	        		  {
+	      	        		   int a=(mball[cbball[ite][itep][ba[4*(ite-1)+k].s]].x-mball[ntx[k]].x)/2;
+	      	        		  int b=(mball[cbball[ite][itep][ba[4*(ite-1)+k].s]].x+mball[ntx[k]].x+40)/2;
+	      	        		  bmovball[ba[4*(ite-1)+k].s].x=b-(int) Math.round(a*Math.cos(Math.toRadians(te)));
+	      	        		  bmovball[ba[4*(ite-1)+k].s].y=345-(int) Math.round(80*Math.sin(Math.toRadians(te)));
+	      	        		  bmovball[ba[4*(ite-1)+k].s].x++;
+	      	        		  }
+	      	        		  else
+	      	        			bmovball[ba[4*(ite-1)+k].s].x++;  
+	      	        	  }
+	      	        	  else
+	      	        	  {
+	      	        		  
+	      	        		if(adj[ntx[k]][cbball[ite][itep][ba[4*(ite-1)+k].s]]==0)
+	      	        		  bmovball[ba[4*(ite-1)+k].s].x--;
+	      	        		else
+	      	        		{
+	      	        			int a=(mball[ntx[k]].x-mball[cbball[ite][itep][ba[4*(ite-1)+k].s]].x)/2;
+	        	        		  int b=(mball[cbball[ite][itep][ba[4*(ite-1)+k].s]].x+mball[ntx[k]].x+40)/2;
+	        	        		  bmovball[ba[4*(ite-1)+k].s].x=b+(int) Math.round(a*Math.cos(Math.toRadians(te)));
+	        	        		  bmovball[ba[4*(ite-1)+k].s].y=345+(int) Math.round(60*Math.sin(Math.toRadians(te)));
+	        	        		  bmovball[ba[4*(ite-1)+k].s].x--;
+	      	        			
+	      	        		}
+	      	        	  }
+	      	        	  
+	           	                    	
+	                     }
+	                   	 else
+	                   		 bmovball[ba[4*(ite-1)+k].s].y=345; 
+	                     }
+	                     
+	                     
+	                     
+	                     
+	                     
+	                     
+	                     
+	                     te+=0.8;
+	            	if(count==0)
+	                  {
+	            		te=0;
+	            		itep++;
+	            		for(int k=0;k<4;k++)
+	            		ntx[k]=b[ntx[k]][ba[(ite-1)*4+k].d].next;
+	                  }
+	                  if(itep==5)
+	                  {
+	                	  itep=1;
+	                	  
+	                		for(int k=0;k<4;k++)
+	               			{
+	                			
+	                			if(terminating==0)
+	                			{
+	               				if(ite!=3)
+	                			ina[(ba[4*(ite-1)+k].d)/2][(ba[4*(ite-1)+k].d)%2]=ina[(ba[4*(ite-1)+k].s)/2][(ba[4*(ite-1)+k].s)%2];
+	                			if(ite!=2)
+	                			inb[(ba[4*(ite-1)+k].d)/2][(ba[4*(ite-1)+k].d)%2]=inb[(ba[4*(ite-1)+k].s)/2][(ba[4*(ite-1)+k].s)%2];
+	                			}
+	               				
+	               				
+	               			}
+	                	  ite++;
+	                	  if(ite==2&&terminating==1)
+	                    		{
+	                		  
+	                		  
+	                		        for(int i=2;i<4;i++)
+	                		        {
+	                		        	for(int j=0;j<2;j++)
+	                		        	{
+	                		        		
+	                		        		ina[i][j]+=ina[i-2][j];//System.out.println(ina[i][j]);
+	                		        	}
+	                		        	
+	                		        }
+	                		        
+	                		        r=40;
+	                		  
+	                		        int om = 20;
+	                	         	
+	                	         	
+	                	         	for(int i=0;i<8;i++)
+	                	         	{ 
+	                	         		bmovball[i]=new coordinate(om+20,350);
+	                	         		//amovball[i]=bmovball[i];
+	                	         		om+=115;
+	                	         	}
+	                	         	repaint();
+	                		  t.stop();
+	                    		}
+	                	  
+	                	  
+	                		 if(ite==2)
+	            			 {
+	            				
+	            				 ntx[0]=ba[4].s;
+	            				 ntx[1]=ba[5].s;
+	            				 ntx[2]=ba[6].s;
+	            				 ntx[3]=ba[7].s;
+	            			 }
+	               			 if(ite==3)
+	            			 {
+	            				
+	            				 ntx[0]=ba[8].s;
+	            				 ntx[1]=ba[9].s;
+	            				 ntx[2]=ba[10].s;
+	            				 ntx[3]=ba[11].s;
+	            			 }
+	               			 if(ite==4)
+	            			 {
+	            				
+	            				 ntx[0]=ba[0].s;
+	            				 ntx[1]=ba[1].s;
+	            				 ntx[2]=ba[2].s;
+	            				 ntx[3]=ba[3].s;
+	            			 }
+	               			 
+	               		
+	               			for(int i=0;i<8;i++)
+	               				{
+	               				if(terminating==0)
+	               				{
+	               				amovball[i].x=mball[i].x+20;
+	               				
+	               				
+	               				bmovball[i].x=mball[i].x+20;
+	               				}
+	               				}
+	               			
+	               			
+	                	  
+	                	  
+	                  }
+	            }
+	                  
+	                  if(ite==4)
+	                  {
+	                	  
+	                	  for(int i=0;i<8;i++)
+	                	  {
+	                		  if(amovball[i].y<bmovball[i].y)
+	                		  {
+	                			  amovball[i].y++;
+	                			  bmovball[i].y--;
+	                		  }
+	                		  else
+	                			  check=1;
+	                		 // repaint();
+	                		  
+	                	  }
+	                	  if(check==1)
+	                	  {
+	                		  r=35;
+	                		  for(int i=0;i<8;i++)
+	                		  {
+	                			  int x=ina[i/2][i%2]*inb[i/2][i%2];
+	                			  ina[i/2][i%2]=x;
+	                			  inb[i/2][i%2]=x;
+	                			  
+	                			  
+	                		  }
+	                		  
+	                	  ite++;
+	                	  }
+	                	  
+	                	  
+	                  
+	                  
+	                  }
+	                  
+	            	
+	            	repaint();
+	            	
+	            	
+	            	if(ite==5)
+	              	  {//t.stop();
+	              	  terminating=1;
+	              	  ite=1;
+	              	  }
+	              }
+	            }	
+	        );
+		
+        JButton btnClickMe = new JButton("START");
+        btnClickMe.setFont(new Font("Tahoma", Font.BOLD, 12));
+        btnClickMe.setBounds(419, 540, 79, 36);
+        btnClickMe.addActionListener(new ActionListener()
+        {
+        	public void actionPerformed(ActionEvent arg0)
+        	{
+        		 count++;
+        
+        		 if(count%2==0)
+        	        	t.stop();
+        		 else
+        			 t.start();
+        	}
+        });
+        add(btnClickMe);
+        
+        textField_12 = new JTextField();
+        textField_12.setColumns(10);
+        textField_12.setBounds(179, 42, 42, 20);
+        add(textField_12);
+        
+        textField_13 = new JTextField();
+        textField_13.setColumns(10);
+        textField_13.setBounds(231, 42, 42, 20);
+        add(textField_13);
+        
+        textField_14 = new JTextField();
+        textField_14.setColumns(10);
+        textField_14.setBounds(231, 11, 42, 20);
+        add(textField_14);
+        
+        textField_15 = new JTextField();
+        textField_15.setColumns(10);
+        textField_15.setBounds(179, 11, 42, 20);
+        add(textField_15);
+        
+        JLabel label = new JLabel("A");
+        label.setFont(new Font("Tw Cen MT", Font.BOLD, 20));
+        label.setBounds(215, 76, 22, 17);
+        add(label);
+        
+        JLabel label_1 = new JLabel("X");
+        label_1.setFont(new Font("Tw Cen MT", Font.BOLD, 20));
+        label_1.setBounds(325, 29, 22, 17);
+        add(label_1);
+        
+        textField_22 = new JTextField();
+        textField_22.setColumns(10);
+        textField_22.setBounds(397, 42, 42, 20);
+        add(textField_22);
+        
+        textField_23 = new JTextField();
+        textField_23.setColumns(10);
+        textField_23.setBounds(397, 11, 42, 20);
+        add(textField_23);
+        
+        textField_30 = new JTextField();
+        textField_30.setColumns(10);
+        textField_30.setBounds(449, 42, 42, 20);
+        add(textField_30);
+        
+        textField_31 = new JTextField();
+        textField_31.setColumns(10);
+        textField_31.setBounds(449, 11, 42, 20);
+        add(textField_31);
+        
+        JLabel label_2 = new JLabel("B");
+        label_2.setFont(new Font("Tw Cen MT", Font.BOLD, 20));
+        label_2.setBounds(436, 76, 22, 17);
+        add(label_2);
+        
+        JLabel label_3 = new JLabel("=");
+        label_3.setFont(new Font("Tw Cen MT", Font.BOLD, 20));
+        label_3.setBounds(549, 29, 27, 17);
+        add(label_3);
+        
+        textField_38 = new JTextField();
+        textField_38.setColumns(10);
+        textField_38.setBounds(648, 42, 42, 20);
+        add(textField_38);
+        
+        textField_39 = new JTextField();
+        textField_39.setColumns(10);
+        textField_39.setBounds(648, 11, 42, 20);
+        add(textField_39);
+        
+        textField_47 = new JTextField();
+        textField_47.setColumns(10);
+        textField_47.setBounds(700, 42, 42, 20);
+        add(textField_47);
+        
+        textField_48 = new JTextField();
+        textField_48.setColumns(10);
+        textField_48.setBounds(700, 11, 42, 20);
+        add(textField_48);
+        
+        JLabel label_4 = new JLabel("C");
+        label_4.setFont(new Font("Tw Cen MT", Font.BOLD, 20));
+        label_4.setBounds(688, 76, 22, 17);
+        add(label_4);
+        
+
+        JButton btnNewButton = new JButton("P1");
+        btnNewButton.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent arg0) {
+        	
+        	count=2;
+        		t.stop();
+        		ite=1;
+        		itep=1;
+        		r=25;
+        		int om = 20;
+        		 ntx[0]=ba[0].s;
+        	        ntx[1]=ba[1].s;
+        	        ntx[2]=ba[2].s;
+        	        ntx[3]=ba[3].s;
+            	te=0;
+            	terminating=0;
+            	
+
+                ina[0][0]= defa[0][0];
+                ina[0][1]= defa[0][1];
+                ina[1][0]= defa[1][0];
+                ina[1][1]= defa[1][1];
+                inb[0][0]= defb[0][0];
+                inb[0][1]= defb[0][1];
+                inb[1][0]= defb[1][0];
+                inb[1][1]= defb[1][1];    
+               
+                           	
+            	for(int i=0;i<8;i++)
+            	{
+            	
+            		
+            	
+            		
+            	amovball[i].x=om+20;
+            			amovball[i].y	=	300;
+            	bmovball[i].x=om+20;
+            	bmovball[i].y	=	345;
+            	om+=115;
+            		
+            		
+            	}
+        		repaint();
+        		
+        		
+        	
+        	
+        	}
+        });
+        btnNewButton.setBounds(207, 493, 65, 36);
+        add(btnNewButton);
+        
+        JButton btnNewButton_1 = new JButton("P2");
+        btnNewButton_1.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent arg0) {
+        	
+        		count=2;
+        		t.stop();
+        		ite=2;
+        		itep=1;
+        		r=25;
+        		int om = 20;
+        		 ntx[0]=ba[4].s;
+        	        ntx[1]=ba[5].s;
+        	        ntx[2]=ba[6].s;
+        	        ntx[3]=ba[7].s;
+            	te=0;
+            	terminating=0;
+            	
+            	
+            	ina[0][0]= defa[0][0];
+                ina[0][1]= defa[0][1];
+                ina[1][0]= defa[1][0];
+                ina[1][1]= defa[1][1];
+                inb[0][0]= defb[0][0];
+                inb[0][1]= defb[0][1];
+                inb[1][0]= defb[1][0];
+                inb[1][1]= defb[1][1];
+                
+                int j=1;
+                for(j=1;j<=ite-1;j++)
+                {
+                	for(int k=0;k<4;k++)
+           			{
+            			
+            			if(terminating==0)
+            			{
+           				if(j!=3)
+            			ina[(ba[4*(j-1)+k].d)/2][(ba[4*(j-1)+k].d)%2]=ina[(ba[4*(j-1)+k].s)/2][(ba[4*(j-1)+k].s)%2];
+            			if(j!=2)
+            			inb[(ba[4*(j-1)+k].d)/2][(ba[4*(j-1)+k].d)%2]=inb[(ba[4*(j-1)+k].s)/2][(ba[4*(j-1)+k].s)%2];
+            			}
+           				
+           				
+           			}
+                	
+                }
+                
+                
+            	
+            	for(int i=0;i<8;i++)
+            	{
+            	
+            		
+            	
+            		
+            	amovball[i].x=om+20;
+            			amovball[i].y	=	300;
+            	bmovball[i].x=om+20;
+            	bmovball[i].y	=	345;
+            	om+=115;
+            		
+            		
+            	}
+        		repaint();
+        		
+        	
+        	
+        	
+        	
+        	}
+        });
+        btnNewButton_1.setBounds(323, 493, 65, 36);
+        add(btnNewButton_1);
+        
+        JButton btnP = new JButton("P3");
+        btnP.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent arg0) {
+        		count=2;
+        		t.stop();
+        		ite=3;
+        		itep=1;
+        		r=25;
+        		int om = 20;
+        		 ntx[0]=ba[8].s;
+        	        ntx[1]=ba[9].s;
+        	        ntx[2]=ba[10].s;
+        	        ntx[3]=ba[11].s;
+            	te=0;
+            	terminating=0;
+              	ina[0][0]= defa[0][0];
+                ina[0][1]= defa[0][1];
+                ina[1][0]= defa[1][0];
+                ina[1][1]= defa[1][1];
+                inb[0][0]= defb[0][0];
+                inb[0][1]= defb[0][1];
+                inb[1][0]= defb[1][0];
+                inb[1][1]= defb[1][1];
+                
+                int j=1;
+                for(j=1;j<=ite-1;j++)
+                {
+                	for(int k=0;k<4;k++)
+           			{
+            			
+            			if(terminating==0)
+            			{
+           				if(j!=3)
+            			ina[(ba[4*(j-1)+k].d)/2][(ba[4*(j-1)+k].d)%2]=ina[(ba[4*(j-1)+k].s)/2][(ba[4*(j-1)+k].s)%2];
+            			if(j!=2)
+            			inb[(ba[4*(j-1)+k].d)/2][(ba[4*(j-1)+k].d)%2]=inb[(ba[4*(j-1)+k].s)/2][(ba[4*(j-1)+k].s)%2];
+            			}
+           				
+           				
+           			}
+                	
+                }
+          
+            	for(int i=0;i<8;i++)
+            	{
+            	
+            		
+            	
+            		
+            	amovball[i].x=om+20;
+            			amovball[i].y	=	300;
+            	bmovball[i].x=om+20;
+            	bmovball[i].y	=	345;
+            	om+=115;
+            		
+            		
+            	}
+        		repaint();
+        	
+        	}
+        });
+        btnP.setBounds(433, 493, 65, 36);
+        add(btnP);
+        
+        JButton btnNewButton_2 = new JButton("P4\r\n");
+        btnNewButton_2.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent arg0) {
+        		
+        		
+        		ite=4;
+        		itep=1;
+        		terminating=0;
+        		te=0;
+        		r=25;
+        		
+        		count=2;
+        		t.stop();
+        		
+        		
+        		int om = 20;
+        		
+        		ina[0][0]= defa[0][0];
+                ina[0][1]= defa[0][1];
+                ina[1][0]= defa[1][0];
+                ina[1][1]= defa[1][1];
+                inb[0][0]= defb[0][0];
+                inb[0][1]= defb[0][1];
+                inb[1][0]= defb[1][0];
+                inb[1][1]= defb[1][1];
+                
+                int j=1;
+                for(j=1;j<=ite-1;j++)
+                {
+                	for(int k=0;k<4;k++)
+           			{
+            			
+            			if(terminating==0)
+            			{
+           				if(j!=3)
+            			ina[(ba[4*(j-1)+k].d)/2][(ba[4*(j-1)+k].d)%2]=ina[(ba[4*(j-1)+k].s)/2][(ba[4*(j-1)+k].s)%2];
+            			if(j!=2)
+            			inb[(ba[4*(j-1)+k].d)/2][(ba[4*(j-1)+k].d)%2]=inb[(ba[4*(j-1)+k].s)/2][(ba[4*(j-1)+k].s)%2];
+            			}
+           				
+           				
+           			}
+                	
+                }
+            	
+            	for(int i=0;i<8;i++)
+            	{
+            	
+            		
+            	
+            		
+              	 amovball[i].x=om+20;
+                 amovball[i].y	=	300;
+            	bmovball[i].x=om+20;
+            	bmovball[i].y	=	345;
+            	om+=115;
+            		
+            		
+            	}
+        		repaint();
+        	
+        		
+        	}
+        });
+        btnNewButton_2.setBounds(539, 493, 65, 36);
+        add(btnNewButton_2);
+        
+        JButton btnNewButton_3 = new JButton("P5");
+        btnNewButton_3.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent arg0) {
+        		
+        		
+        		ite=1;
+        		terminating=1;
+        		itep=1;
+        		te=0;
+        		count=2;
+        		t.stop();
+                 r=35;
+        		 int om = 20;
+        		
+        		ntx[0]=ba[0].s;
+    	        ntx[1]=ba[1].s;
+    	        ntx[2]=ba[2].s;
+    	        ntx[3]=ba[3].s;
+            	
+
+        		ina[0][0]= defa[0][0];
+                ina[0][1]= defa[0][1];
+                ina[1][0]= defa[1][0];
+                ina[1][1]= defa[1][1];
+                inb[0][0]= defb[0][0];
+                inb[0][1]= defb[0][1];
+                inb[1][0]= defb[1][0];
+                inb[1][1]= defb[1][1];
+                
+                int j=1;
+                for(j=1;j<=3;j++)
+                {
+                	for(int k=0;k<4;k++)
+           			{
+            			
+            			
+           				if(j!=3)
+            			ina[(ba[4*(j-1)+k].d)/2][(ba[4*(j-1)+k].d)%2]=ina[(ba[4*(j-1)+k].s)/2][(ba[4*(j-1)+k].s)%2];
+            			if(j!=2)
+            			inb[(ba[4*(j-1)+k].d)/2][(ba[4*(j-1)+k].d)%2]=inb[(ba[4*(j-1)+k].s)/2][(ba[4*(j-1)+k].s)%2];
+            			
+           				
+           				
+           			}
+                	
+                }
+            	
+                r=35;
+      		  for(int i=0;i<8;i++)
+      		  {
+      			  int x=ina[i/2][i%2]*inb[i/2][i%2];
+      			  ina[i/2][i%2]=x;
+      			  inb[i/2][i%2]=x;
+      			  
+      			  
+      		  }
+    	        
+            	for(int i=0;i<8;i++)
+            	{
+            	
+            		
+            	
+            		
+            	amovball[i].x=om+20;
+            			amovball[i].y	=	322;
+            	bmovball[i].x=om+20;
+            	bmovball[i].y	=	322;
+            	om+=115;
+            		
+            		
+            	}
+        		repaint();
+        	}
+        });
+        btnNewButton_3.setBounds(637, 493, 65, 36);
+        add(btnNewButton_3);
+        
+        textField = new JTextField();
+        textField.setBounds(47, 574, 824, 87);
+        add(textField);
+        textField.setColumns(10);
+    }
+
+
+    @Override
+    public void paintComponent(Graphics g)
+    {
+    	 super.paintComponent(g);
+         g.setColor(Color.white);
+         g.drawArc(mball[0].x+30, mball[0].y-40, 35, 45, 0, 360);
+         
+         g.drawArc(mball[7].x+30, mball[7].y-40, 35, 45, 0, 360);
+         g.drawArc(mball[1].x+30, mball[1].y-40, 115, 90, 0, 180);
+         g.drawLine(mball[1].x+145, mball[1].y,mball[1].x+148, mball[1].y-3);
+         g.drawLine(mball[1].x+145, mball[1].y,mball[1].x+138, mball[1].y-3);
+         g.drawArc(mball[2].x+34, mball[2].y-45, 236, 90, 0, 180);
+         g.drawLine(mball[2].x+270, mball[2].y,mball[2].x+275, mball[2].y-5);
+         g.drawLine(mball[2].x+270, mball[2].y,mball[2].x+262, mball[2].y-5);
+         g.drawArc(mball[3].x+30, mball[3].y-45, 350, 90, 0, 180);
+         g.drawLine(mball[3].x+379, mball[3].y,mball[3].x+383, mball[3].y-5);
+         g.drawLine(mball[3].x+379, mball[3].y,mball[3].x+373, mball[3].y-5);
+         g.drawArc(mball[5].x+30, mball[5].y+30, 115, 90,180,180);
+         g.drawLine(mball[5].x+30,mball[5].y+75,mball[5].x+25,mball[5].y+80);
+         g.drawLine(mball[5].x+30,mball[5].y+75,mball[5].x+35,mball[5].y+80);
+         g.drawArc(mball[3].x+25, mball[3].y+30, 230, 90,180,180);
+         
+         g.drawLine(mball[3].x+25,mball[3].y+72,mball[3].x+30,mball[3].y+77);
+         g.drawLine(mball[3].x+25,mball[5].y+72,mball[3].x+20,mball[3].y+77);
+         
+         
+         g.drawArc(mball[1].x+30, mball[1].y+30, 345, 90,180,180);
+         
+         g.drawLine(mball[1].x+30,mball[1].y+75,mball[1].x+35,mball[1].y+80);
+         g.drawLine(mball[1].x+30,mball[1].y+75,mball[1].x+25,mball[1].y+80);
+         
+         g.drawLine(mball[0].x+75, mball[0].y+35,mball[1].x, mball[1].y+35);
+         g.drawLine(mball[2].x+75, mball[2].y+35,mball[3].x, mball[3].y+35);
+         g.drawLine(mball[4].x+75, mball[4].y+35,mball[5].x, mball[5].y+35);
+         g.drawLine(mball[6].x+75, mball[6].y+35,mball[7].x, mball[7].y+35);
+         g.drawLine(mball[7].x, mball[7].y+35,mball[7].x-5, mball[7].y+30);
+         g.drawLine(mball[7].x, mball[7].y+35,mball[7].x-5, mball[7].y+40);
+         g.drawLine(mball[6].x+75, mball[6].y+35,mball[6].x+80, mball[6].y+30);
+         g.drawLine(mball[6].x+75, mball[6].y+35,mball[6].x+80, mball[6].y+40);
+         g.drawLine(mball[5].x, mball[5].y+35,mball[5].x-5, mball[5].y+30);
+         g.drawLine(mball[5].x, mball[5].y+35,mball[5].x-5, mball[5].y+40);
+         g.drawLine(mball[4].x+75, mball[4].y+35,mball[4].x+80, mball[4].y+30);
+         g.drawLine(mball[4].x+75, mball[4].y+35,mball[4].x+80, mball[4].y+40);
+         
+         g.drawLine(mball[3].x, mball[3].y+35,mball[3].x-5, mball[3].y+30);
+         g.drawLine(mball[3].x, mball[3].y+35,mball[3].x-5, mball[3].y+40);
+         
+         g.drawLine(mball[2].x+75, mball[2].y+35,mball[2].x+80, mball[2].y+30);
+         g.drawLine(mball[2].x+75, mball[2].y+35,mball[2].x+80, mball[2].y+40);
+         g.drawLine(mball[1].x, mball[1].y+35,mball[1].x-5, mball[1].y+30);
+         g.drawLine(mball[1].x, mball[1].y+35,mball[1].x-5, mball[1].y+40);
+         g.drawLine(mball[0].x+75, mball[0].y+35,mball[0].x+80, mball[0].y+30);
+         g.drawLine(mball[0].x+75, mball[0].y+35,mball[0].x+80, mball[0].y+40);
+         
+         
+         for(int i=0;i<8;i++)
+         {
+         	
+         	g.setColor(Color.BLUE);
+         	g.drawOval(mball[i].x,mball[i].y,75,75);
+         	g.setColor(Color.GREEN);
+         	
+         	
+         	if(ite==1&&i>3&&terminating==0)
+         		continue;
+         	if(ite!=5&&ite!=4&&terminating==0)
+         	g.fillOval(mball[i].x+20,mball[i].y,r,r);
+         	g.setColor(Color.YELLOW);
+         	if(ite!=5&&ite!=4&&terminating==0)
+         	g.fillOval(mball[i].x+20,345,r,r);
+         //	g.drawOval(bball[i].x,bball[i].y,25,25);
+         	g.setColor(Color.GREEN);
+         	 // if(ite!=2&&terminating!=1)
+         	g.fillOval(amovball[i].x,amovball[i].y,r,r);
+         	g.setColor(Color.YELLOW);
+         	if(ite!=5&&terminating==0)
+         	g.fillOval(bmovball[i].x,bmovball[i].y,r,r);
+         	
+         	g.setColor(Color.BLACK);
+         	if(((terminating==1&&ite==2&&i>3)||terminating==0||(terminating==1&&ite==1)))
+         	g.drawString(ina[i/2][i%2]+" ",amovball[i].x+10, amovball[i].y+15);
+         	if(terminating==0)
+         	g.drawString(inb[i/2][i%2]+" ",bmovball[i].x+10, bmovball[i].y+15);
+            if(terminating==0&&ite!=4)
+            {
+         	   g.drawString(ina[i/2][i%2]+" ",mball[i].x+30, mball[i].y+15);
+         	   g.drawString(inb[i/2][i%2]+" ",mball[i].x+30, mball[i].y+60);
+            }
+         	
+         }
+    }
+}
